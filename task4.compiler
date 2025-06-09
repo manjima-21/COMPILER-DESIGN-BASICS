@@ -27,7 +27,7 @@ double parsePower() {
     skipWS();
     if (pos < input.size() && input[pos] == '^') {
         pos++;
-        double right = parsePower(); // right-associative power
+        double right = parsePower(); 
         return pow(left, right);
     }
     return left;
