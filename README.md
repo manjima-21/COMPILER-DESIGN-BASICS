@@ -47,7 +47,7 @@ Future enhancements to the compiler could include:
 2. Support for Control Structures: Adding support for control structures, such as if-else statements and loops, would make the compiler more versatile.
 3. Optimization Techniques: Implementing optimization techniques, such as constant folding and dead code elimination, would improve the compiler's performance.
 
-   *OUTPUT*
+*OUTPUT*
 
    ![Image](https://github.com/user-attachments/assets/db0492c0-c60b-4d50-aa1e-84bb2df959af)
 
