@@ -1,0 +1,91 @@
+#include <iostream>
+#include <unordered_map>
+#include <functional>
+#include <vector>
+#include <cmath>
+#include <string>
+#include <stdexcept>
+#include <cctype>
+using namespace std;
+unordered_map<string, double> vars;
+unordered_map<string, function<double(const vector<double>&)>> funcs;
+void initFuncs() {
+    funcs["sin"] = [](const vector<double> &a){ return sin(a[0]); };
+    funcs["max"] = [](const vector<double> &a){ return max(a[0], a[1]); };
+}
+size_t pos = 0;
+string input;
+void skipWS();
+string parseIdentifier();
+void expect(char c);
+double parseExpression();
+double parseNumberOrParens();
+double parseFactor();
+double parsePower();
+double parsePower() {
+    double left = parseFactor();
+    skipWS();
+    if (pos < input.size() && input[pos] == '^') {
+        pos++;
+        double right = parsePower(); // right-associative power
+        return pow(left, right);
+    }
+    return left;
+}
+double parseFactor() {
+    skipWS();
+    if (isalpha(input[pos])) {
+        string id = parseIdentifier();
+        skipWS();
+        if (pos < input.size() && input[pos] == '(') {
+            pos++;
+            vector<double> args;
+            if (input[pos] != ')') {
+                do {
+                    args.push_back(parseExpression());
+                    skipWS();
+                } while (input[pos] == ',' && ++pos);
+            }
+            expect(')');
+            if (!funcs.count(id)) throw runtime_error("Function not found: " + id);
+            return funcs[id](args);
+        } else {
+            if (!vars.count(id)) throw runtime_error("Variable not found: " + id);
+            return vars[id];
+        }
+    }
+    return parseNumberOrParens();
+}
+double parseStatement() {
+    skipWS();
+    size_t start = pos;
+    if (isalpha(input[pos])) {
+        string id = parseIdentifier();
+        skipWS();
+        if (pos < input.size() && input[pos] == '=') {
+            pos++;
+            double val = parseExpression();
+            vars[id] = val;
+            return val;
+        }
+        pos = start;
+    }
+    return parseExpression();
+}
+int main() {
+    initFuncs();
+    string line;
+    while (true) {
+        cout << "> ";
+        if (!getline(cin, line) || line == "exit") break;
+        try {
+            input = line;
+            pos = 0;
+            double result = parseStatement();
+            cout << "= " << result << endl;
+        } catch (const exception& e) {
+            cerr << "Error: " << e.what() << endl;
+        }
+    }
+    return 0;
+}
