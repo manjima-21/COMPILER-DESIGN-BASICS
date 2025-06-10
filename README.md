@@ -49,6 +49,5 @@ Future enhancements to the compiler could include:
 
 *OUTPUT*
 
-   ![Image](https://github.com/user-attachments/assets/db0492c0-c60b-4d50-aa1e-84bb2df959af)
-
+  ![Image](https://github.com/user-attachments/assets/29f40f8c-0a5d-4d30-b3fe-53982db678f4)
    
